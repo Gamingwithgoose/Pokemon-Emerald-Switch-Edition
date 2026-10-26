@@ -1,0 +1,39 @@
+REQUIRED SOFTWARE
+
+PC: Windows 10 or Windows 11, x64 (Intel/AMD).
+Allow about 1 GB of free disk space for Python packages and build files.
+
+PYTHON
+  Version tested: Python 3.14.6, 64-bit.
+  The launcher selects the Python 3.14 series. Other series are not the
+  supported setup for this pack.
+  Official Windows downloads: https://www.python.org/downloads/windows/
+  Tested release: https://www.python.org/downloads/release/python-3146/
+  Choose the Windows installer (64-bit), not the embeddable ZIP.
+  Keep pip and the Python launcher enabled. Enable Add Python to PATH if offered.
+
+POWERSHELL
+  Windows PowerShell 5.1, included with Windows 10/11.
+  PowerShell 7 is not required. No permanent execution-policy change is needed.
+
+PYTHON PACKAGES
+  Installed automatically into .venv on the first build:
+    lz4 4.4.5
+    Pillow 12.3.0
+    cryptography 50.0.2
+    cffi 2.1.1 (cryptography dependency)
+    pycparser 3.12 (cffi dependency)
+  Exact pins: builder/requirements.txt
+  Internet access to the configured Python package index is needed for setup.
+  Game files and keys are processed locally; the builder does not upload them.
+
+PACKAGER (INCLUDED)
+  hacPack, source commit e506cb58b7843d86df7518156debd28f3b575638.
+  tools/hacpack.exe is a native Windows x64 build using the Windows UCRT.
+  No MSYS2 installation or external runtime DLLs are needed on Windows 10/11.
+  Corresponding source and licenses are in tools/.
+  You do not need devkitPro, a compiler, Git, or an existing Emerald NSP.
+
+SWITCH
+  An Atmosphere setup that already supports your usual local NSP installer.
+  This guide does not install or configure custom firmware or an NSP installer.

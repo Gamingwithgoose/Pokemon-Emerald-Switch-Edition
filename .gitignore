@@ -1,0 +1,17 @@
+# Private inputs. Keep folder layout via the template archive/setup script.
+/switch files/**
+/Emerald rom/**
+/Homescreen Icon/**
+/Release/**
+/.build/
+/.venv/
+__pycache__/
+*.pyc
+# Never publish game dumps, saves, keys or generated installation files.
+*.keys
+*.gba
+*.sav
+*.nsp
+*.nca
+*.nacp
+*.npdm
