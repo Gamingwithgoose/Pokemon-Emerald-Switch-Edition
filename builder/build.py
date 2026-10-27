@@ -1,4 +1,4 @@
-"""Rebuild the tested Emerald W3 application from exact user-supplied inputs."""
+"""Rebuild the tested Emerald W6 application from exact user-supplied inputs."""
 from pathlib import Path
 import argparse, hashlib, json, os, shutil, struct, subprocess, sys, uuid
 import lz4.block
@@ -44,6 +44,8 @@ def repack(header,image,segments,entry,dest):
 def main():
     p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args()
     patch=json.loads((ROOT/'builder/patches.json').read_text())
+    release=patch['release']
+    require(release['candidate']=='W6' and release['title_version']==11,'Unsupported builder patch release')
     exefs=ROOT/'switch files/exefs';control=ROOT/'switch files/control 0/control.nacp'
     keys=ROOT/'switch files/prod.keys';roms=list((ROOT/'Emerald rom').glob('*.gba'))
     required=[exefs/n for n in ['main','subsdk0','rtld','sdk','main.npdm']]+[control,keys]
@@ -98,10 +100,11 @@ def main():
         draw.line([(128,24),(105,90),(128,158),(151,90),(128,24),(57,87),(199,87)],fill='#c5ffe7',width=3)
         draw.text((128,205),'EMERALD',anchor='mm',font_size=29,fill='white')
         im.save(stage/'control/icon_AmericanEnglish.dat','JPEG',quality=95)
-    manifest={'title':'Pokemon Emerald','title_id':TITLE,'title_version':8,'display_version':'1.0.0',
+    manifest={'title':'Pokemon Emerald','title_id':TITLE,'title_version':release['title_version'],'display_version':'1.0.0',
               'internal_rom_name':'Emerald_e.gba','internal_save_name':'Emerald_e.sav',
               'main_build_id':patch['main']['target_build_id'],'subsdk0_build_id':patch['subsdk0']['target_build_id'],
-              'rom_sha256':sha(rom),'wireless_candidate':'W3','icon':'custom' if icons else 'generated emerald symbol'}
+              'rom_sha256':sha(rom),'wireless_candidate':release['candidate'],
+              'hardware_baseline':release['hardware_status'],'icon':'custom' if icons else 'generated emerald symbol'}
     (stage/'manifest.json').write_text(json.dumps(manifest,indent=2))
     tool=ROOT/'tools/hacpack.exe';log=stage/'build.log'
     require(tool.is_file(),'Bundled tools/hacpack.exe is missing. Extract the full build pack again.')
@@ -117,7 +120,7 @@ def main():
     print('Building the standalone application...',flush=True)
     program=nca(['--ncatype','program','--exefsdir',stage/'exefs','--romfsdir',stage/'romfs'])
     ctl=nca(['--ncatype','control','--romfsdir',stage/'control'])
-    nca(['--ncatype','meta','--titletype','application','--programnca',program,'--controlnca',ctl,'--titleversion','00000008'])
+    nca(['--ncatype','meta','--titletype','application','--programnca',program,'--controlnca',ctl,'--titleversion',f"{release['title_version']:08x}"])
     run(['--type','nsp','--ncadir',stage/'ncas','-o',stage/'result'])
     nsp=stage/'result'/(TITLE.lower()+'.nsp')
     require(nsp.is_file(),'Packager did not produce the NSP')

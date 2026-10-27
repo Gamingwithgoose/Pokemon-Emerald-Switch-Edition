@@ -9,7 +9,7 @@ The result must have these IDs before packaging:
 
 - main: `4ba69d8ed940a09e14bd55b272a73ce7114b499750b5f45479aa2cd83925c358`
 - subsdk0: `5772a23d47d16a96913158ae9fbe109526793f65e0ee068eff56c58a233a707d`
-- patched ROM SHA-256: `a6179cc1b1908019f0da032e4ac19443eb1ef9d391f97cbb7d40ad6a6e98ef07`
+- patched ROM SHA-256: `06b2f8497b096d69798ee8931c8a147405832daaacef59c97e06452518f6ac0c`
 
 The scripts decompress and validate each NSO segment, apply changes, extend the
 text segment to its verified boundary, update BSS size, recalculate segment
@@ -36,7 +36,7 @@ offsets remain in the game's save. The save gate checks the complete rotating
 section set, signature, checksums, and counters before allowing a committed
 native snapshot. It uses the actual emulator backup-manager layout.
 
-## W3 wireless hooks
+## W3 transport retained in W6
 
 Eight guest Thumb BL sites route through the gateway at `080000CC`, with a
 284-byte router/shim payload at `08F00000`:
@@ -62,6 +62,16 @@ sequence, service, pre-command native state, mode, peer count, guest R0.
 Polls are sampled every 64 calls. The first captured record on a new launch
 truncates that diagnostic file. It never opens `Emerald_e.sav`.
 
+## W6 post-trade communication
+
+Two post-write readiness calls use the gateway at `080000D4` to a 140-byte
+Thumb shim at `08F01000`. FRLG peers receive the additional standby exchange;
+Emerald peers keep the original sequence. Calls to the original engine use
+explicit Thumb LDR/BX stubs for ARMv4T. The original trade callbacks and save
+writer remain in place. See W6-CHANGELOG.md for the reproduced W5 defect and
+the corrected CPU tests. The local builder uses the frozen W6 patch bytes,
+so users do not need a compiler.
+
 ## Packager source and licenses
 
 hacPack upstream: https://github.com/DarkMatterCore/hacPack
@@ -77,7 +87,7 @@ source archive. Preserve them when sharing the pack.
 Credits: hacPack and its upstream contributors; pret's pokeemerald and
 pokefirered decompilations for protocol/save analysis; gmr7z's original Hoenn
 save patch for the starting emulator-save adaptation. RTC, corrected save
-gate, standalone changes, W3 integration, and this builder were developed in
+gate, standalone changes, W6 integration, and this builder were developed in
 this project. No blanket relicensing of third-party work is claimed.
 
 Public reference commits used during analysis:
@@ -91,4 +101,4 @@ Only the exact English Emerald ROM and LeafGreen dump listed in README are
 supported. Ruby, Sapphire, Seaglass, other regions, and emulator updates need
 their own analysis. No Champion/National Dex bypass or save editor is included.
 Berry events are not independently confirmed here. The pack keeps the tested
-diagnostic logger and internal content version 8, with display version 1.0.0.
+diagnostic logger and internal content version 11, with display version 1.0.0.

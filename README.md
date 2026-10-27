@@ -28,6 +28,10 @@ and isn't used automatically.
 This guide starts with files you already have. It does not cover obtaining
 keys, game dumps, or ROMs.
 
+This pack now builds the hardware-tested **W6** communication code, including
+the post-trade readiness exchange and ARMv4T-safe calls. Display version stays
+**1.0.0 | Nintendo**. It builds a full standalone NSP with installation version 11.
+
 ## 1. Install Python
 
 Use **Python 3.14, 64-bit**, on a Windows 10 or Windows 11 x64 PC.
@@ -162,7 +166,7 @@ or system software-management screen. It does not replace LeafGreen. Keep
 your save backup if you want to restore it later.
 
 If a console test fails, record whether it happened at launch, Continue,
-saving, or wireless search. Export `Emerald_W3.bin` from the application's save
+saving, or wireless search. Export `Emerald_W6.bin` from the application's save
 if present. For a crash, also collect the matching SD-card report from
 `atmosphere/crash_reports` or `atmosphere/fatal_errors`, if one was created.
 
@@ -170,13 +174,13 @@ if present. For a crash, also collect the matching SD-card report from
 
 The builder patches the original Nintendo emulator rather than replacing it.
 It adds cartridge RTC GPIO handling at `0x080000C4/C6/C8`, using the Switch system
-clock, plus the verified Emerald save-completion gate. The W3 wireless bridge
+clock, plus the verified Emerald save-completion gate. The W6 wireless bridge
 connects eight Emerald RFU call sites to the emulator's existing native wireless
 services while preserving the original RFU routines and callbacks.
 
 The standalone metadata gives Emerald its own application/save identity while
 retaining the original communication authorizations. The displayed version
-stays 1.0.0; the internal content version is 8, matching the tested W3 build.
+stays 1.0.0; the internal content version is 8, matching the tested W6 build.
 
 The previous build was tested on real Switch hardware for RTC, saving,
 sleep/resume, Emerald ↔ Emerald communication, and Emerald ↔ FireRed trading.

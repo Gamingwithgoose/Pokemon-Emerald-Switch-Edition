@@ -1,23 +1,21 @@
-# Build-pack verification — 2026-10-26
+# W6 builder verification — 2026-10-26
 
-Tested on Windows with Python 3.14.6 x64. Personal inputs were copied into a
-separate private test directory; none were added to this pack.
+A complete Windows build passed using copies of the user's original inputs in
+a separate private test folder. No personal inputs were added to this pack.
 
-- Full build with an empty icon folder: PASS, generated emerald-symbol icon.
-- Full PowerShell launcher from a fresh `.venv`: PASS, dependency installation,
-  custom WebP icon conversion, build, and final verification.
-- Reconstructed main and subsdk0 Build IDs: match the tested W3 baseline.
-- Patched Emerald ROM SHA-256: matches the tested W3 baseline.
-- Finished NSP: three content archives with valid IDs, sizes, metadata,
-  filesystem header hashes, ExeFS hashes, and CNMT references.
-- Embedded executable files, ROM, icon, and NACP: match their staged inputs.
-- Title/save identity and communication authorizations: match the intended build.
-- Original keys, ExeFS, control, and ROM: unchanged after each build.
-- Bundled native hacPack: imports Windows system/UCRT libraries; no MSYS runtime.
+- Reconstructed W6 ROM: exact byte match with the hardware-tested installer.
+- All ExeFS files and control.nacp: exact byte matches with W6.
+- Custom WebP icon conversion, NCA/NSP packaging and independent verification: pass.
+- Installation version 11, display 1.0.0 / Nintendo, title and save IDs: checked.
+- Original inputs: unchanged after building.
 
-- Batch launcher: PASS, full build and verification, exit code 0.
-- Empty-input check: PASS, reports missing file paths without creating an NSP.
+W6 was confirmed working by the user on Switch after the W5 failure. The newly
+rebuilt installer was verified on the PC; that particular rebuilt file has not
+been retested on the console.
 
-The batch file delegates to the same PowerShell launcher. Console behavior
-was established by the preceding W3 build; the
-newly rebuilt NSP was validated on the PC, not retested on a Switch in this run.
+The existing batch/PowerShell launchers and dependency versions are unchanged.
+Their fresh-environment setup was tested with the earlier W3 pack. This update
+tested the full Python build path with the updated frozen patch data.
+
+The public archive and repository delivery exclude keys, ROMs, saves, original
+executables, control metadata, generated NSPs and private test folders.
